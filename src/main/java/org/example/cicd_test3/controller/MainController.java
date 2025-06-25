@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MainController {
     @GetMapping
     private String hello() {
-        return "This is auto deployment with container5";
+        return "This is auto deployment with container - version 3";
     }
 }
