@@ -48,7 +48,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script_stop: true
           script: |
-            # dockerhub에 토큰을 가지고 로그인
+#             dockerhub에 토큰을 가지고 로그인
 #            echo ${{ secrets.D }}
 #            docker login -u ${{ secrets.DOCKER_USER }}
             # 기존에 실행되던 컨테이너 중지 & 삭제
