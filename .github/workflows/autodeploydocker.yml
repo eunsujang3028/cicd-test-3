@@ -34,3 +34,27 @@ jobs:
 
       - name: docker hub 에 push하기
         run: docker push ${{ secrets.DOCKER_USER }}/web-app:latest
+
+  deploy-job:
+    needs: build-job
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: EC2에 접속(ssh)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script_stop: true
+          script: |
+            # dockerhub에 토큰을 가지고 로그인
+#            echo ${{ secrets.D }}
+#            docker login -u ${{ secrets.DOCKER_USER }}
+            # 기존에 실행되던 컨테이너 중지 & 삭제
+            docker stop myweb || true
+            docker rm myweb || true
+            # 변경된 이미지 pull
+            docker pull ${{ secrets.DOCKER_USER }}/web-app:latest
+            # 새로운 컨테이너 실행
+            docker run -d --name myweb -p 8080:8080 ${{ secrets.DOCKER_USER }}/web-app:latest
